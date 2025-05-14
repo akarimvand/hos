@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Light Mode</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      color: #212529;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .sidebar {
+      width: 300px;
+      height: 100vh;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .accordion-button {
+      background-color: #fff;
+      color: #000;
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: #e9ecef;
+      color: #000;
+    }
+    .accordion-body a {
+      display: block;
+      padding: 5px 0;
+      text-decoration: none;
+      color: #333;
+    }
+    .accordion-body a:hover {
+      text-decoration: underline;
+    }
+    .content {
+      margin-left: 300px;
+      padding: 2rem;
+    }
+    .card {
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      border-radius: 0.75rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+  <h5 class="mb-4"><i class="fas fa-bars me-2"></i>Navigation</h5>
+  <div class="accordion" id="accordionMenu">
+    <!-- Accordion items generated from DevExpress-like structure -->
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDashboard"><i class="fas fa-gauge-high me-2"></i>Dashboard</button></h2>
+      <div id="collapseDashboard" class="accordion-collapse collapse show">
+        <div class="accordion-body">
+          <a href="#">System Overview</a>
+          <a href="#">Subsystem Status Summary</a>
+          <a href="#">Punch & Form Progress Charts</a>
+          <a href="#">Notifications & Alerts</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDefinition"><i class="fas fa-database me-2"></i>Defination</button></h2>
+      <div id="collapseDefinition" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <a href="#">Project Define</a>
+          <a href="#">Subsystem Categories</a>
+          <a href="#">Disciplines</a>
+          <a href="#">Items and Tasks List</a>
+          <a href="#">Import and Export Data</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHand"><i class="fas fa-handshake me-2"></i>Hand over System</button></h2>
+      <div id="collapseHand" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <a href="#">Final Dossier Tracking</a>
+          <a href="#">Print Forms</a>
+          <a href="#">Check List and Test Sheets</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePunch"><i class="fas fa-tools me-2"></i>Punch Managment</button></h2>
+      <div id="collapsePunch" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <a href="#">Punch Managment</a>
+          <a href="#">Hold Point Managment</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForms"><i class="fas fa-file-alt me-2"></i>Forms & Reports</button></h2>
+      <div id="collapseForms" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <a href="#">Managment Reports</a>
+          <a href="#">Export Data to Cloud</a>
+          <a href="#">Report For Meeting</a>
+          <a href="#">Element22</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsers"><i class="fas fa-users-cog me-2"></i>User Management</button></h2>
+      <div id="collapseUsers" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <a href="#">Users & Roles</a>
+          <a href="#">Access Levels</a>
+          <a href="#">Audit Logs</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings"><i class="fas fa-sliders-h me-2"></i>Settings & Configuration</button></h2>
+      <div id="collapseSettings" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <a href="#">Import / Export Path</a>
+          <a href="#">Cloud Storage</a>
+          <a href="#">Project Setup</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocs"><i class="fas fa-folder-open me-2"></i>Documents</button></h2>
+      <div id="collapseDocs" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <a href="#">All Project Documents</a>
+          <a href="#">Subsystem Documents</a>
+          <a href="#">Item-Linked Documents</a>
+          <a href="#">Punch & Hold Attachments</a>
+          <a href="#">Engineering Drawings</a>
+          <a href="#">Checklist Forms</a>
+          <a href="#">Certificates</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content Area -->
+<div class="content">
+  <div class="container-fluid">
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card text-white" style="background-color:#2196f3">
+          <div class="card-body">
+            <h5 class="card-title"><i class="fas fa-layer-group me-2"></i>Total Subsystems</h5>
+            <h3 class="display-6" id="subsystemsCount">37</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white" style="background-color:#f44336">
+          <div class="card-body">
+            <h5 class="card-title"><i class="fas fa-wrench me-2"></i>Punch Items</h5>
+            <h3 class="display-6" id="punchCount">124</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white" style="background-color:#4caf50">
+          <div class="card-body">
+            <h5 class="card-title"><i class="fas fa-check-circle me-2"></i>Forms Completed</h5>
+            <h3 class="display-6" id="formsDone">89%</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white" style="background-color:#ff9800">
+          <div class="card-body">
+            <h5 class="card-title"><i class="fas fa-bell me-2"></i>Critical Alerts</h5>
+            <h3 class="display-6" id="alertsCount">7</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h5 class="card-title"><i class="fas fa-chart-bar me-2"></i>Subsystem Status</h5>
+          <div class="chart-container">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h5 class="card-title"><i class="fas fa-chart-pie me-2"></i>Discipline Distribution</h5>
+          <div class="chart-container">
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const barCtx = document.getElementById('barChart').getContext('2d');
+  new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Subsystem A', 'B', 'C', 'D'],
+      datasets: [{
+        label: 'Progress (%)',
+        data: [85, 72, 56, 90],
+        backgroundColor: ['#2196f3', '#4caf50', '#ff9800', '#f44336']
+      }]
+    },
+    options: {
+      animation: { duration: 1500 },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+
+  const pieCtx = document.getElementById('pieChart').getContext('2d');
+  new Chart(pieCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Electrical', 'Mechanical', 'Instrumentation', 'Civil'],
+      datasets: [{
+        data: [25, 35, 20, 20],
+        backgroundColor: ['#3f51b5', '#e91e63', '#00bcd4', '#8bc34a']
+      }]
+    },
+    options: {
+      animation: {
+        animateRotate: true,
+        animateScale: true
+      }
+    }
+  });
+</script>
+</body>
+</html>
