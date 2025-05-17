@@ -1,4 +1,4 @@
- Discipline 	 Total Punch 	 Cleared 	 In Progress 	 Ready For Approve 	 Remain 
+Discipline 	 Total Punch 	 Cleared 	 In Progress 	 Ready For Approve 	 Remain 
 Building	42	15	6	3	18
 Civil	378	141	51	18	168
 Electrical	25056	9270	3429	1269	11088
