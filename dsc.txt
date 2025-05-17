@@ -1,0 +1,11 @@
+ Discipline 	 Total Punch 	 Cleared 	 In Progress 	 Ready For Approve 	 Remain 
+Building	42	15	6	3	18
+Civil	378	141	51	18	168
+Electrical	25056	9270	3429	1269	11088
+Instrument	33975	12570	4650	1722	15033
+Mechanical(Rotary)	249	93	33	12	111
+Mechanical(Static)	339	126	48	18	147
+Piping	3057	1131	417	153	1356
+Paint & Insulation	10956	4053	1500	555	4848
+Structure	1317	486	180	66	585
+HVAC	57	21	9	3	24
