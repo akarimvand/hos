@@ -1,260 +1,1449 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard Light Mode</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      background-color: #f8f9fa;
-      color: #212529;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .sidebar {
-      width: 300px;
-      height: 100vh;
-      background: #fff;
-      border-right: 1px solid #ddd;
-      position: fixed;
-      top: 0;
-      left: 0;
-      padding: 1rem;
-      overflow-y: auto;
-    }
-    .accordion-button {
-      background-color: #fff;
-      color: #000;
-    }
-    .accordion-button:not(.collapsed) {
-      background-color: #e9ecef;
-      color: #000;
-    }
-    .accordion-body a {
-      display: block;
-      padding: 5px 0;
-      text-decoration: none;
-      color: #333;
-    }
-    .accordion-body a:hover {
-      text-decoration: underline;
-    }
-    .content {
-      margin-left: 300px;
-      padding: 2rem;
-    }
-    .card {
-      background-color: #ffffff;
-      border: 1px solid #dee2e6;
-      border-radius: 0.75rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-    .chart-container {
-      position: relative;
-      height: 300px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAPRA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #1abc9c;
+            --dark-color: #34495e;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 280px;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-content {
+            margin-right: 280px;
+            transition: all 0.3s;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tree-node {
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-bottom: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tree-node:hover {
+            background-color: rgba(0, 123, 255, 0.3); /* More visible blue hover color */
+        }
+        
+        .tree-node.selected {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .tree-node i {
+            margin-left: 8px;
+            transition: all 0.3s;
+        }
+        
+        .tree-children {
+            padding-right: 20px;
+            margin-right: 10px;
+            border-right: 1px dashed rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+        
+        .tree-node.open > .tree-children {
+            display: block;
+        }
+        
+        .tree-node.open > i.bi-chevron-left {
+            transform: rotate(-90deg);
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+        
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+        
+        .system-summary {
+            border-left: 4px solid var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: #7f8c8d;
+        }
+        
+        .search-box input {
+            padding-right: 15px;
+            padding-left: 40px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        .export-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .export-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: #7f8c8d;
+            font-weight: 500;
+            padding: 10px 20px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            background-color: transparent;
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 250px;
+                transform: translateX(-250px);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content.active {
+                margin-right: 250px;
+            }
+        }
+        
+        /* RTL specific styles */
+        [dir="rtl"] .tree-node i {
+            margin-right: 8px;
+            margin-left: 0;
+        }
+        
+        [dir="rtl"] .search-box i {
+            right: 15px;
+            left: auto;
+        }
+        
+        [dir="rtl"] .search-box input {
+            padding-left: 15px;
+            padding-right: 40px;
+        }
+        
+        [dir="rtl"] .tree-children {
+            padding-left: 20px;
+            padding-right: 0;
+            margin-left: 10px;
+            margin-right: 0;
+            border-left: 1px dashed rgba(255, 255, 255, 0.2);
+            border-right: none;
+        }
+        
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7f8c8d;
+        }
+    </style>
 </head>
 <body>
-<!-- Sidebar -->
-<div class="sidebar">
-  <h5 class="mb-4"><i class="fas fa-bars me-2"></i>Navigation</h5>
-  <div class="accordion" id="accordionMenu">
-    <!-- Accordion items generated from DevExpress-like structure -->
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDashboard"><i class="fas fa-gauge-high me-2"></i>Dashboard</button></h2>
-      <div id="collapseDashboard" class="accordion-collapse collapse show">
-        <div class="accordion-body">
-          <a href="#">System Overview</a>
-          <a href="#">Subsystem Status Summary</a>
-          <a href="#">Punch & Form Progress Charts</a>
-          <a href="#">Notifications & Alerts</a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="p-4">
+            <h4 class="text-center mb-4">
+                <i class="bi bi-diagram-3-fill"></i> Technical Systems
+            </h4>
+            
+            <div class="search-box mb-4">
+                <i class="bi bi-search"></i>
+                <input type="text" class="form-control" placeholder="Search system..." id="searchInput">
+            </div>
+            
+            <div class="tree-view-container" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                <div id="treeview"></div>
+            </div>
         </div>
-      </div>
     </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDefinition"><i class="fas fa-database me-2"></i>Defination</button></h2>
-      <div id="collapseDefinition" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <a href="#">Project Define</a>
-          <a href="#">Subsystem Categories</a>
-          <a href="#">Disciplines</a>
-          <a href="#">Items and Tasks List</a>
-          <a href="#">Import and Export Data</a>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" id="sidebarToggle">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="d-flex align-items-center">
+                    <h5 class="mb-0" id="dashboardTitle">Technical Subsystems Management Dashboard</h5>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-success me-2" id="exportExcel">
+                        <i class="bi bi-file-earmark-excel"></i> خروجی اکسل
+                    </button>
+                    <span class="badge bg-primary">
+                        <i class="bi bi-box-seam"></i> 
+                        <span id="totalItemsCounter">0</span> items
+                    </span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Dashboard Content -->
+        <div class="container-fluid py-4">
+            <!-- Summary Cards -->
+            <div class="row mb-4" id="summaryCards">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-muted">تکمیل شده</h6>
+                                <span class="badge bg-success bg-opacity-10 text-success">
+                                    <i class="bi bi-check-circle"></i>
+                                </span>
+                            </div>
+                            <h3 class="mb-2 text-success" id="doneCount">0</h3>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success" role="progressbar" id="doneProgress" style="width: 0%"></div>
+                            </div>
+                            <p class="text-muted mb-0"><small id="donePercent">0%</small> از کل آیتم‌ها</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-muted">در حال انتظار</h6>
+                                <span class="badge bg-warning bg-opacity-10 text-warning">
+                                    <i class="bi bi-clock"></i>
+                                </span>
+                            </div>
+                            <h3 class="mb-2 text-warning" id="pendingCount">0</h3>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-warning" role="progressbar" id="pendingProgress" style="width: 0%"></div>
+                            </div>
+                            <p class="text-muted mb-0"><small id="pendingPercent">0%</small> از کل آیتم‌ها</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-muted">باقی‌مانده</h6>
+                                <span class="badge bg-info bg-opacity-10 text-info">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </span>
+                            </div>
+                            <h3 class="mb-2 text-info" id="remainingCount">0</h3>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-info" role="progressbar" id="remainingProgress" style="width: 0%"></div>
+                            </div>
+                            <p class="text-muted mb-0"><small id="remainingPercent">0%</small> از کل آیتم‌ها</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-muted">مشکلات</h6>
+                                <span class="badge bg-danger bg-opacity-10 text-danger">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </span>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <h6 class="text-muted small">Punch</h6>
+                                    <h4 class="text-danger" id="punchCount">0</h4>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <h6 class="text-muted small">Hold Point</h6>
+                                    <h4 class="text-danger" id="holdCount">0</h4>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-0"><small id="issuesPercent">0%</small> از کل آیتم‌ها</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Section -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="chartTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">نمای کلی</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="discipline-tab" data-bs-toggle="tab" data-bs-target="#discipline" type="button" role="tab">بر اساس رشته</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="system-tab" data-bs-toggle="tab" data-bs-target="#system" type="button" role="tab">بر اساس سیستم</button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content p-3" id="chartTabsContent">
+                                <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-6 mb-4">
+                                            <h6 class="text-muted mb-3">وضعیت کلی</h6>
+                                            <div class="chart-container">
+                                                <canvas id="overviewChart"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-4">
+                                            <h6 class="text-muted mb-3">توزیع مشکلات</h6>
+                                            <div class="chart-container">
+                                                <canvas id="issuesChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="discipline" role="tabpanel">
+                                    <div class="row" id="disciplineCharts"></div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="system" role="tabpanel">
+                                    <div class="row" id="systemCharts"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">جزئیات آیتم‌ها</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>سیستم</th>
+                                            <th>زیرسیستم</th>
+                                            <th>رشته</th>
+                                            <th>کل آیتم‌ها</th>
+                                            <th>تکمیل شده</th>
+                                            <th>در حال انتظار</th>
+                                            <th>Punch</th>
+                                            <th>Hold Point</th>
+                                            <th>وضعیت</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dataTableBody">
+                                        <tr>
+                                            <td colspan="9" class="text-center py-5 text-muted">لطفاً یک زیرسیستم را از لیست انتخاب کنید</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHand"><i class="fas fa-handshake me-2"></i>Hand over System</button></h2>
-      <div id="collapseHand" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <a href="#">Final Dossier Tracking</a>
-          <a href="#">Print Forms</a>
-          <a href="#">Check List and Test Sheets</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePunch"><i class="fas fa-tools me-2"></i>Punch Managment</button></h2>
-      <div id="collapsePunch" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <a href="#">Punch Managment</a>
-          <a href="#">Hold Point Managment</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForms"><i class="fas fa-file-alt me-2"></i>Forms & Reports</button></h2>
-      <div id="collapseForms" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <a href="#">Managment Reports</a>
-          <a href="#">Export Data to Cloud</a>
-          <a href="#">Report For Meeting</a>
-          <a href="#">Element22</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsers"><i class="fas fa-users-cog me-2"></i>User Management</button></h2>
-      <div id="collapseUsers" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <a href="#">Users & Roles</a>
-          <a href="#">Access Levels</a>
-          <a href="#">Audit Logs</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings"><i class="fas fa-sliders-h me-2"></i>Settings & Configuration</button></h2>
-      <div id="collapseSettings" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <a href="#">Import / Export Path</a>
-          <a href="#">Cloud Storage</a>
-          <a href="#">Project Setup</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocs"><i class="fas fa-folder-open me-2"></i>Documents</button></h2>
-      <div id="collapseDocs" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <a href="#">All Project Documents</a>
-          <a href="#">Subsystem Documents</a>
-          <a href="#">Item-Linked Documents</a>
-          <a href="#">Punch & Hold Attachments</a>
-          <a href="#">Engineering Drawings</a>
-          <a href="#">Checklist Forms</a>
-          <a href="#">Certificates</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Content Area -->
-<div class="content">
-  <div class="container-fluid">
-    <div class="row g-4">
-      <div class="col-md-3">
-        <div class="card text-white" style="background-color:#2196f3">
-          <div class="card-body">
-            <h5 class="card-title"><i class="fas fa-layer-group me-2"></i>Total Subsystems</h5>
-            <h3 class="display-6" id="subsystemsCount">37</h3>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card text-white" style="background-color:#f44336">
-          <div class="card-body">
-            <h5 class="card-title"><i class="fas fa-wrench me-2"></i>Punch Items</h5>
-            <h3 class="display-6" id="punchCount">124</h3>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card text-white" style="background-color:#4caf50">
-          <div class="card-body">
-            <h5 class="card-title"><i class="fas fa-check-circle me-2"></i>Forms Completed</h5>
-            <h3 class="display-6" id="formsDone">89%</h3>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card text-white" style="background-color:#ff9800">
-          <div class="card-body">
-            <h5 class="card-title"><i class="fas fa-bell me-2"></i>Critical Alerts</h5>
-            <h3 class="display-6" id="alertsCount">7</h3>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row mt-5">
-      <div class="col-md-6">
-        <div class="card p-4">
-          <h5 class="card-title"><i class="fas fa-chart-bar me-2"></i>Subsystem Status</h5>
-          <div class="chart-container">
-            <canvas id="barChart"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card p-4">
-          <h5 class="card-title"><i class="fas fa-chart-pie me-2"></i>Discipline Distribution</h5>
-          <div class="chart-container">
-            <canvas id="pieChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const barCtx = document.getElementById('barChart').getContext('2d');
-  new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels: ['Subsystem A', 'B', 'C', 'D'],
-      datasets: [{
-        label: 'Progress (%)',
-        data: [85, 72, 56, 90],
-        backgroundColor: ['#2196f3', '#4caf50', '#ff9800', '#f44336']
-      }]
-    },
-    options: {
-      animation: { duration: 1500 },
-      scales: { y: { beginAtZero: true } }
-    }
-  });
-
-  const pieCtx = document.getElementById('pieChart').getContext('2d');
-  new Chart(pieCtx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Electrical', 'Mechanical', 'Instrumentation', 'Civil'],
-      datasets: [{
-        data: [25, 35, 20, 20],
-        backgroundColor: ['#3f51b5', '#e91e63', '#00bcd4', '#8bc34a']
-      }]
-    },
-    options: {
-      animation: {
-        animateRotate: true,
-        animateScale: true
-      }
-    }
-  });
-</script>
+    
+    <script>
+        // Data structures
+        const dataModel = {
+            systemMap: {},    // Maps systemId to system data
+            dataMap: {},      // Maps subId to subsystem data
+            allData: [],      // All raw data from CSV
+            currentView: null // Currently selected view (system or subsystem)
+        };
+        
+        // Chart instances
+        const chartInstances = {
+            overview: null,
+            issues: null,
+            disciplines: {},
+            systems: {}
+        };
+        
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load data from CSV
+            await loadData();
+            
+            // Build the tree view
+            buildTreeView();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Initialize mobile sidebar toggle
+            initMobileSidebar();
+            
+            // Auto-select the first subsystem for demo purposes
+            setTimeout(() => {
+                const firstSub = document.querySelector('[data-sub-id]');
+                if (firstSub) {
+                    firstSub.click();
+                }
+            }, 500);
+        });
+        
+        // Load data from CSV
+        async function loadData() {
+            const csvUrl = "https://raw.githubusercontent.com/akarimvand/hos/refs/heads/main/data.csv";
+            
+            return new Promise((resolve, reject) => {
+                Papa.parse(csvUrl, {
+                    download: true,
+                    header: true,
+                    complete: function(results) {
+                        // Filter out empty rows
+                        const data = results.data.filter(row => 
+                            row.SD_System && row.SD_Sub_System && row.discipline
+                        );
+                        
+                        dataModel.allData = data;
+                        
+                        // Process data into hierarchical structure
+                        data.forEach(row => {
+                            const systemId = row.SD_System.trim();
+                            const systemName = row.SD_System_Name.trim();
+                            const subId = row.SD_Sub_System.trim();
+                            const subName = row.SD_Subsystem_Name.trim();
+                            const discipline = row.discipline.trim();
+                            
+                            // Build system map
+                            if (!dataModel.systemMap[systemId]) {
+                                dataModel.systemMap[systemId] = {
+                                    id: systemId,
+                                    name: systemName,
+                                    subs: []
+                                };
+                            }
+                            
+                            // Add subsystem if not already present
+                            if (!dataModel.systemMap[systemId].subs.find(s => s.id === subId)) {
+                                dataModel.systemMap[systemId].subs.push({ 
+                                    id: subId, 
+                                    name: subName 
+                                });
+                            }
+                            
+                            // Build data map
+                            if (!dataModel.dataMap[subId]) {
+                                dataModel.dataMap[subId] = {
+                                    systemId: systemId,
+                                    title: `${subId} - ${subName}`,
+                                    disciplines: {}
+                                };
+                            }
+                            
+                            // Add discipline data
+                            dataModel.dataMap[subId].disciplines[discipline] = {
+                                total: parseInt(row["TOTAL ITEM"]) || 0,
+                                done: parseInt(row["TOTAL DONE"]) || 0,
+                                pending: parseInt(row["TOTAL PENDING"]) || 0,
+                                punch: parseInt(row["TOTAL NOT CLEAR PUNCH"]) || 0,
+                                hold: parseInt(row["TOTAL HOLD POINT"]) || 0
+                            };
+                        });
+                        
+                        resolve();
+                    },
+                    error: function(error) {
+                        console.error("Error loading CSV data:", error);
+                        reject(error);
+                    }
+                });
+            });
+        }
+        
+        // Build the tree view
+        function buildTreeView() {
+            const treeRoot = document.getElementById('treeview');
+            treeRoot.innerHTML = '';
+            
+            // Add "All Systems" node
+            const allSystemsNode = createTreeNode({
+                id: 'all',
+                name: 'همه سیستم‌ها',
+                icon: 'bi-collection',
+                isSystem: true
+            });
+            
+            allSystemsNode.addEventListener('click', () => {
+                loadAllSystemsView();
+                highlightSelected(allSystemsNode);
+            });
+            
+            treeRoot.appendChild(allSystemsNode);
+            
+            // Add individual systems
+            Object.values(dataModel.systemMap).forEach(system => {
+                const systemNode = createTreeNode({
+                    id: system.id,
+                    name: system.id,  // Show only sd_system id, not name
+                    icon: 'bi-folder',
+                    isSystem: true,
+                    hasChildren: system.subs.length > 0
+                });
+                
+                // Add children (subsystems)
+                if (system.subs.length > 0) {
+                    const childrenContainer = document.createElement('div');
+                    childrenContainer.className = 'tree-children';
+                    
+                    system.subs.forEach(sub => {
+                        const subNode = createTreeNode({
+                            id: sub.id,
+                            name: sub.id,  // Show only sd_subsystem id, not name
+                            icon: 'bi-puzzle',
+                            isSystem: false,
+                            parentId: system.id
+                        });
+                        
+                        subNode.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            loadSubsystemView(sub.id);
+                            highlightSelected(subNode);
+                        });
+                        
+                        childrenContainer.appendChild(subNode);
+                    });
+                    
+                    systemNode.appendChild(childrenContainer);
+                }
+                
+                systemNode.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('tree-node')) return;
+                    
+                    systemNode.classList.toggle('open');
+                    const icon = systemNode.querySelector('i.bi-chevron-left');
+                    if (icon) icon.classList.toggle('rotate-90');
+                    
+                    // Load system view if clicking on system node (not toggling)
+                    if (e.target === systemNode) {
+                        loadSystemView(system.id);
+                        highlightSelected(systemNode);
+                    }
+                });
+                
+                treeRoot.appendChild(systemNode);
+            });
+            
+            // Set up search functionality
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                document.querySelectorAll('.tree-node').forEach(node => {
+                    const nodeText = node.textContent.toLowerCase();
+                    if (nodeText.includes(searchTerm)) {
+                        node.style.display = 'flex';
+                        
+                        // Show parent nodes of matching nodes
+                        let parent = node.parentElement;
+                        while (parent && parent.classList.contains('tree-children')) {
+                            parent.style.display = 'block';
+                            parent.previousElementSibling.classList.add('open');
+                            parent.previousElementSibling.querySelector('i.bi-chevron-left')?.classList.add('rotate-90');
+                            parent = parent.parentElement;
+                        }
+                    } else {
+                        node.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // Create a tree node element
+        function createTreeNode({ id, name, icon, isSystem, hasChildren = false, parentId = null }) {
+            const node = document.createElement('div');
+            node.className = 'tree-node';
+            node.dataset.id = id;
+            if (!isSystem) node.dataset.subId = id;
+            node.dataset.parentId = parentId;
+            
+            const nodeContent = document.createElement('div');
+            nodeContent.className = 'd-flex align-items-center';
+            
+            // Add icon
+            if (icon) {
+                const iconElem = document.createElement('i');
+                iconElem.className = `bi ${icon} me-2`;
+                nodeContent.appendChild(iconElem);
+            }
+            
+            // Add text
+            const textElem = document.createElement('span');
+            textElem.textContent = name;
+            nodeContent.appendChild(textElem);
+            
+            // Add chevron if has children
+            if (hasChildren) {
+                const chevron = document.createElement('i');
+                chevron.className = 'bi bi-chevron-left ms-auto';
+                nodeContent.appendChild(chevron);
+            }
+            
+            node.appendChild(nodeContent);
+            return node;
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Export to Excel button
+            document.getElementById('exportExcel').addEventListener('click', exportToExcel);
+        }
+        
+        // Initialize mobile sidebar toggle
+        function initMobileSidebar() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                mainContent.classList.toggle('active');
+                
+                // Fix z-index and overflow to prevent overlap issues
+                if (sidebar.classList.contains('active')) {
+                    sidebar.style.zIndex = '1050';
+                    mainContent.style.overflow = 'hidden';
+                } else {
+                    sidebar.style.zIndex = '';
+                    mainContent.style.overflow = '';
+                }
+            });
+            
+            // Make entire sidebar clickable to toggle
+            sidebar.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                mainContent.classList.toggle('active');
+                
+                if (sidebar.classList.contains('active')) {
+                    sidebar.style.zIndex = '1050';
+                    mainContent.style.overflow = 'hidden';
+                } else {
+                    sidebar.style.zIndex = '';
+                    mainContent.style.overflow = '';
+                }
+            });
+        }
+        
+        // Highlight selected node
+        function highlightSelected(selectedNode) {
+            document.querySelectorAll('.tree-node').forEach(node => {
+                node.classList.remove('selected');
+            });
+            
+            selectedNode.classList.add('selected');
+            
+            // Scroll to selected node
+            selectedNode.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Load view for all systems
+        function loadAllSystemsView() {
+            dataModel.currentView = { type: 'all' };
+            
+            // Calculate totals across all systems
+            let totalItems = 0;
+            let totalDone = 0;
+            let totalPending = 0;
+            let totalPunch = 0;
+            let totalHold = 0;
+            
+            Object.values(dataModel.dataMap).forEach(sub => {
+                Object.values(sub.disciplines).forEach(discipline => {
+                    totalItems += discipline.total;
+                    totalDone += discipline.done;
+                    totalPending += discipline.pending;
+                    totalPunch += discipline.punch;
+                    totalHold += discipline.hold;
+                });
+            });
+            
+            // Update UI
+            updateDashboardTitle('همه سیستم‌ها');
+            updateSummaryCards(totalItems, totalDone, totalPending, totalPunch, totalHold);
+            updateOverviewCharts(totalItems, totalDone, totalPending, totalPunch, totalHold);
+            updateSystemCharts();
+            
+            // Clear discipline charts
+            document.getElementById('disciplineCharts').innerHTML = `
+                <div class="col-12 text-center py-5 text-muted">
+                    <i class="bi bi-pie-chart fs-1"></i>
+                    <p class="mt-3">برای مشاهده جزئیات هر رشته، یک زیرسیستم را انتخاب کنید</p>
+                </div>
+            `;
+            
+            // Update data table
+            updateDataTable(null);
+        }
+        
+        // Load view for a specific system
+        function loadSystemView(systemId) {
+            const system = dataModel.systemMap[systemId];
+            if (!system) return;
+            
+            dataModel.currentView = { type: 'system', id: systemId };
+            
+            // Calculate totals for this system
+            let totalItems = 0;
+            let totalDone = 0;
+            let totalPending = 0;
+            let totalPunch = 0;
+            let totalHold = 0;
+            
+            system.subs.forEach(sub => {
+                const subData = dataModel.dataMap[sub.id];
+                if (subData) {
+                    Object.values(subData.disciplines).forEach(discipline => {
+                        totalItems += discipline.total;
+                        totalDone += discipline.done;
+                        totalPending += discipline.pending;
+                        totalPunch += discipline.punch;
+                        totalHold += discipline.hold;
+                    });
+                }
+            });
+            
+            // Update UI
+            updateDashboardTitle(`سیستم ${systemId} - ${system.name}`);
+            updateSummaryCards(totalItems, totalDone, totalPending, totalPunch, totalHold);
+            updateOverviewCharts(totalItems, totalDone, totalPending, totalPunch, totalHold);
+            updateSystemCharts(systemId);
+            
+            // Clear discipline charts
+            document.getElementById('disciplineCharts').innerHTML = `
+                <div class="col-12 text-center py-5 text-muted">
+                    <i class="bi bi-pie-chart fs-1"></i>
+                    <p class="mt-3">برای مشاهده جزئیات هر رشته، یک زیرسیستم را انتخاب کنید</p>
+                </div>
+            `;
+            
+            // Update data table with all subsystems in this system
+            updateDataTable(system.subs.map(sub => sub.id));
+        }
+        
+        // Load view for a specific subsystem
+        function loadSubsystemView(subId) {
+            const subData = dataModel.dataMap[subId];
+            if (!subData) return;
+            
+            const system = dataModel.systemMap[subData.systemId];
+            dataModel.currentView = { type: 'subsystem', id: subId };
+            
+            // Calculate totals for this subsystem
+            let totalItems = 0;
+            let totalDone = 0;
+            let totalPending = 0;
+            let totalPunch = 0;
+            let totalHold = 0;
+            
+            Object.values(subData.disciplines).forEach(discipline => {
+                totalItems += discipline.total;
+                totalDone += discipline.done;
+                totalPending += discipline.pending;
+                totalPunch += discipline.punch;
+                totalHold += discipline.hold;
+            });
+            
+            // Update UI
+            updateDashboardTitle(subData.title);
+            updateSummaryCards(totalItems, totalDone, totalPending, totalPunch, totalHold);
+            updateOverviewCharts(totalItems, totalDone, totalPending, totalPunch, totalHold);
+            updateDisciplineCharts(subId);
+            updateSystemCharts(subData.systemId);
+            
+            // Update data table with this subsystem
+            updateDataTable([subId]);
+        }
+        
+        // Update dashboard title
+        function updateDashboardTitle(title) {
+            document.getElementById('dashboardTitle').textContent = title;
+        }
+        
+        // Update summary cards
+        function updateSummaryCards(total, done, pending, punch, hold) {
+            const remaining = total - done - pending;
+            const donePercent = total > 0 ? Math.round((done / total) * 100) : 0;
+            const pendingPercent = total > 0 ? Math.round((pending / total) * 100) : 0;
+            const remainingPercent = total > 0 ? Math.round((remaining / total) * 100) : 0;
+            const issuesPercent = total > 0 ? Math.round(((punch + hold) / total) * 100) : 0;
+            
+            // Update counters
+            document.getElementById('totalItemsCounter').textContent = total.toLocaleString();
+            document.getElementById('doneCount').textContent = done.toLocaleString();
+            document.getElementById('pendingCount').textContent = pending.toLocaleString();
+            document.getElementById('remainingCount').textContent = remaining.toLocaleString();
+            document.getElementById('punchCount').textContent = punch.toLocaleString();
+            document.getElementById('holdCount').textContent = hold.toLocaleString();
+            
+            // Update progress bars
+            document.getElementById('doneProgress').style.width = `${donePercent}%`;
+            document.getElementById('pendingProgress').style.width = `${pendingPercent}%`;
+            document.getElementById('remainingProgress').style.width = `${remainingPercent}%`;
+            
+            // Update percentages
+            document.getElementById('donePercent').textContent = `${donePercent}%`;
+            document.getElementById('pendingPercent').textContent = `${pendingPercent}%`;
+            document.getElementById('remainingPercent').textContent = `${remainingPercent}%`;
+            document.getElementById('issuesPercent').textContent = `${issuesPercent}%`;
+        }
+        
+        // Update overview charts
+        function updateOverviewCharts(total, done, pending, punch, hold) {
+            const remaining = total - done - pending;
+            
+            // Overview chart (status distribution)
+            const overviewCtx = document.getElementById('overviewChart').getContext('2d');
+            
+            if (chartInstances.overview) {
+                chartInstances.overview.destroy();
+            }
+            
+            chartInstances.overview = new Chart(overviewCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['تکمیل شده', 'در حال انتظار', 'باقی‌مانده'],
+                    datasets: [{
+                        data: [done, pending, remaining],
+                        backgroundColor: ['#2ecc71', '#f39c12', '#3498db'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            rtl: true,
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    family: 'Vazir, sans-serif'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            rtl: true,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+            
+            // Issues chart (punch vs hold)
+            const issuesCtx = document.getElementById('issuesChart').getContext('2d');
+            
+            if (chartInstances.issues) {
+                chartInstances.issues.destroy();
+            }
+            
+            chartInstances.issues = new Chart(issuesCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Punch', 'Hold Point'],
+                    datasets: [{
+                        data: [punch, hold],
+                        backgroundColor: ['#e74c3c', '#9b59b6'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            rtl: true,
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    family: 'Vazir, sans-serif'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            rtl: true,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = Math.round((value / (punch + hold)) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        }
+        
+        // Update discipline charts for a subsystem
+        function updateDisciplineCharts(subId) {
+            const subData = dataModel.dataMap[subId];
+            if (!subData) return;
+            
+            const container = document.getElementById('disciplineCharts');
+            container.innerHTML = '';
+            
+            Object.entries(subData.disciplines).forEach(([discipline, data], index) => {
+                const total = data.total;
+                const done = data.done;
+                const pending = data.pending;
+                const punch = data.punch;
+                const hold = data.hold;
+                const remaining = total - done - pending;
+                
+                const chartId = `disciplineChart-${index}`;
+                const cardId = `disciplineCard-${index}`;
+                
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4 mb-4 fade-in';
+                col.innerHTML = `
+                    <div class="card h-100" id="${cardId}">
+                        <div class="card-body">
+                            <h6 class="card-title text-center mb-3">${discipline}</h6>
+                            <div class="chart-container">
+                                <canvas id="${chartId}"></canvas>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-success"><i class="bi bi-check-circle"></i> تکمیل شده</span>
+                                    <span>${done} (${Math.round((done / total) * 100)}%)</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-warning"><i class="bi bi-clock"></i> در حال انتظار</span>
+                                    <span>${pending} (${Math.round((pending / total) * 100)}%)</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-primary"><i class="bi bi-arrow-repeat"></i> باقی‌مانده</span>
+                                    <span>${remaining} (${Math.round((remaining / total) * 100)}%)</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-danger"><i class="bi bi-tools"></i> Punch</span>
+                                    <span>${punch}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-danger"><i class="bi bi-hand-index-thumb"></i> Hold Point</span>
+                                    <span>${hold}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(col);
+                
+                // Initialize chart after DOM update
+                setTimeout(() => {
+                    const ctx = document.getElementById(chartId).getContext('2d');
+                    
+                    if (chartInstances.disciplines[chartId]) {
+                        chartInstances.disciplines[chartId].destroy();
+                    }
+                    
+                    chartInstances.disciplines[chartId] = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['تکمیل شده', 'در حال انتظار', 'باقی‌مانده'],
+                            datasets: [{
+                                data: [done, pending, remaining],
+                                backgroundColor: ['#2ecc71', '#f39c12', '#3498db'],
+                                borderWidth: 0,
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    rtl: true,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.raw || 0;
+                                            const percentage = Math.round((value / total) * 100);
+                                            return `${label}: ${value} (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            },
+                            cutout: '75%',
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            }
+                        }
+                    });
+                }, 100);
+            });
+        }
+        
+        // Update system charts
+        function updateSystemCharts(systemId = null) {
+            const container = document.getElementById('systemCharts');
+            container.innerHTML = '';
+            
+            if (!systemId) {
+                // Show all systems
+                Object.values(dataModel.systemMap).forEach((system, index) => {
+                    // Calculate totals for this system
+                    let totalItems = 0;
+                    let totalDone = 0;
+                    let totalPending = 0;
+                    
+                    system.subs.forEach(sub => {
+                        const subData = dataModel.dataMap[sub.id];
+                        if (subData) {
+                            Object.values(subData.disciplines).forEach(discipline => {
+                                totalItems += discipline.total;
+                                totalDone += discipline.done;
+                                totalPending += discipline.pending;
+                            });
+                        }
+                    });
+                    
+                    const remaining = totalItems - totalDone - totalPending;
+                    const chartId = `systemChart-${index}`;
+                    
+                    const col = document.createElement('div');
+                    col.className = 'col-md-6 col-lg-4 mb-4 fade-in';
+                    col.innerHTML = `
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-center mb-3">${system.id} - ${system.name}</h6>
+                                <div class="chart-container">
+                                    <canvas id="${chartId}"></canvas>
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <span class="badge bg-light text-dark">
+                                        <i class="bi bi-box-seam"></i> ${totalItems} آیتم
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(col);
+                    
+                    // Initialize chart after DOM update
+                    setTimeout(() => {
+                        const ctx = document.getElementById(chartId).getContext('2d');
+                        
+                        if (chartInstances.systems[chartId]) {
+                            chartInstances.systems[chartId].destroy();
+                        }
+                        
+                        chartInstances.systems[chartId] = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['تکمیل شده', 'در حال انتظار', 'باقی‌مانده'],
+                                datasets: [{
+                                    data: [totalDone, totalPending, remaining],
+                                    backgroundColor: ['#2ecc71', '#f39c12', '#3498db'],
+                                    borderWidth: 0,
+                                    hoverOffset: 10
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        rtl: true,
+                                        callbacks: {
+                                            label: function(context) {
+                                                const label = context.label || '';
+                                                const value = context.raw || 0;
+                                                const percentage = Math.round((value / totalItems) * 100);
+                                                return `${label}: ${value} (${percentage}%)`;
+                                            }
+                                        }
+                                    }
+                                },
+                                cutout: '75%',
+                                animation: {
+                                    animateScale: true,
+                                    animateRotate: true
+                                }
+                            }
+                        });
+                    }, 100);
+                });
+            } else {
+                // Show specific system with all its subsystems
+                const system = dataModel.systemMap[systemId];
+                if (!system) return;
+                
+                system.subs.forEach((sub, index) => {
+                    const subData = dataModel.dataMap[sub.id];
+                    if (!subData) return;
+                    
+                    // Calculate totals for this subsystem
+                    let totalItems = 0;
+                    let totalDone = 0;
+                    let totalPending = 0;
+                    
+                    Object.values(subData.disciplines).forEach(discipline => {
+                        totalItems += discipline.total;
+                        totalDone += discipline.done;
+                        totalPending += discipline.pending;
+                    });
+                    
+                    const remaining = totalItems - totalDone - totalPending;
+                    const chartId = `systemChart-${index}`;
+                    
+                    const col = document.createElement('div');
+                    col.className = 'col-md-6 col-lg-4 mb-4 fade-in';
+                    col.innerHTML = `
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-center mb-3">${sub.id} - ${sub.name}</h6>
+                                <div class="chart-container">
+                                    <canvas id="${chartId}"></canvas>
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <span class="badge bg-light text-dark">
+                                        <i class="bi bi-box-seam"></i> ${totalItems} آیتم
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(col);
+                    
+                    // Initialize chart after DOM update
+                    setTimeout(() => {
+                        const ctx = document.getElementById(chartId).getContext('2d');
+                        
+                        if (chartInstances.systems[chartId]) {
+                            chartInstances.systems[chartId].destroy();
+                        }
+                        
+                        chartInstances.systems[chartId] = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['تکمیل شده', 'در حال انتظار', 'باقی‌مانده'],
+                                datasets: [{
+                                    data: [totalDone, totalPending, remaining],
+                                    backgroundColor: ['#2ecc71', '#f39c12', '#3498db'],
+                                    borderWidth: 0,
+                                    hoverOffset: 10
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        rtl: true,
+                                        callbacks: {
+                                            label: function(context) {
+                                                const label = context.label || '';
+                                                const value = context.raw || 0;
+                                                const percentage = Math.round((value / totalItems) * 100);
+                                                return `${label}: ${value} (${percentage}%)`;
+                                            }
+                                        }
+                                    }
+                                },
+                                cutout: '75%',
+                                animation: {
+                                    animateScale: true,
+                                    animateRotate: true
+                                }
+                            }
+                        });
+                    }, 100);
+                });
+            }
+        }
+        
+        // Update data table
+        function updateDataTable(subIds = null) {
+            const tbody = document.getElementById('dataTableBody');
+            tbody.innerHTML = '';
+            
+            if (!subIds) {
+                // Show all data
+                dataModel.allData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.SD_System} - ${row.SD_System_Name}</td>
+                        <td>${row.SD_Sub_System} - ${row.SD_Subsystem_Name}</td>
+                        <td>${row.discipline}</td>
+                        <td>${row["TOTAL ITEM"]}</td>
+                        <td>${row["TOTAL DONE"]}</td>
+                        <td>${row["TOTAL PENDING"]}</td>
+                        <td>${row["TOTAL NOT CLEAR PUNCH"] || 0}</td>
+                        <td>${row["TOTAL HOLD POINT"] || 0}</td>
+                        <td>
+                            <span class="badge bg-success bg-opacity-10 text-success">
+                                ${Math.round((row["TOTAL DONE"] / row["TOTAL ITEM"]) * 100)}%
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                // Filter data by subIds
+                const filteredData = dataModel.allData.filter(row => 
+                    subIds.includes(row.SD_Sub_System.trim())
+                );
+                
+                if (filteredData.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="9" class="text-center py-5 text-muted">داده‌ای برای نمایش وجود ندارد</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                filteredData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.SD_System} - ${row.SD_System_Name}</td>
+                        <td>${row.SD_Sub_System} - ${row.SD_Subsystem_Name}</td>
+                        <td>${row.discipline}</td>
+                        <td>${row["TOTAL ITEM"]}</td>
+                        <td>${row["TOTAL DONE"]}</td>
+                        <td>${row["TOTAL PENDING"]}</td>
+                        <td>${row["TOTAL NOT CLEAR PUNCH"] || 0}</td>
+                        <td>${row["TOTAL HOLD POINT"] || 0}</td>
+                        <td>
+                            <span class="badge bg-success bg-opacity-10 text-success">
+                                ${Math.round((row["TOTAL DONE"] / row["TOTAL ITEM"]) * 100)}%
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+        
+        // Export to Excel
+        function exportToExcel() {
+            let dataToExport = [];
+            
+            if (!dataModel.currentView) {
+                // Export all data
+                dataToExport = dataModel.allData.map(row => ({
+                    'سیستم': row.SD_System,
+                    'نام سیستم': row.SD_System_Name,
+                    'زیرسیستم': row.SD_Sub_System,
+                    'نام زیرسیستم': row.SD_Subsystem_Name,
+                    'رشته': row.discipline,
+                    'کل آیتم‌ها': row["TOTAL ITEM"],
+                    'تکمیل شده': row["TOTAL DONE"],
+                    'در حال انتظار': row["TOTAL PENDING"],
+                    'Punch': row["TOTAL NOT CLEAR PUNCH"] || 0,
+                    'Hold Point': row["TOTAL HOLD POINT"] || 0,
+                    'درصد پیشرفت': `${Math.round((row["TOTAL DONE"] / row["TOTAL ITEM"]) * 100)}%`
+                }));
+            } else if (dataModel.currentView.type === 'system') {
+                // Export system data
+                const system = dataModel.systemMap[dataModel.currentView.id];
+                if (!system) return;
+                
+                system.subs.forEach(sub => {
+                    const subData = dataModel.dataMap[sub.id];
+                    if (!subData) return;
+                    
+                    Object.entries(subData.disciplines).forEach(([discipline, data]) => {
+                        dataToExport.push({
+                            'سیستم': system.id,
+                            'نام سیستم': system.name,
+                            'زیرسیستم': sub.id,
+                            'نام زیرسیستم': sub.name,
+                            'رشته': discipline,
+                            'کل آیتم‌ها': data.total,
+                            'تکمیل شده': data.done,
+                            'در حال انتظار': data.pending,
+                            'Punch': data.punch,
+                            'Hold Point': data.hold,
+                            'درصد پیشرفت': `${Math.round((data.done / data.total) * 100)}%`
+                        });
+                    });
+                });
+            } else if (dataModel.currentView.type === 'subsystem') {
+                // Export subsystem data
+                const subData = dataModel.dataMap[dataModel.currentView.id];
+                if (!subData) return;
+                
+                const system = dataModel.systemMap[subData.systemId];
+                
+                Object.entries(subData.disciplines).forEach(([discipline, data]) => {
+                    dataToExport.push({
+                        'سیستم': system.id,
+                        'نام سیستم': system.name,
+                        'زیرسیستم': dataModel.currentView.id,
+                        'نام زیرسیستم': subData.title.split(' - ')[1],
+                        'رشته': discipline,
+                        'کل آیتم‌ها': data.total,
+                        'تکمیل شده': data.done,
+                        'در حال انتظار': data.pending,
+                        'Punch': data.punch,
+                        'Hold Point': data.hold,
+                        'درصد پیشرفت': `${Math.round((data.done / data.total) * 100)}%`
+                    });
+                });
+            }
+            
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'گزارش زیرسیستم‌ها');
+            
+            // Generate file and download
+            const fileName = `گزارش_زیرسیستم‌ها_${new Date().toLocaleDateString('fa-IR')}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+    </script>
 </body>
 </html>
