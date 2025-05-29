@@ -1,0 +1,141 @@
+﻿SD_System,discipline,SD_Sub_System,SD_System_Name,SD_Subsystem_Name,TOTAL ITEM,TOTAL DONE,TOTAL PENDING,TOTAL NOT CLEAR PUNCH,TOTAL HOLD POINT
+1000,PIPING,1000-01,Gas Preparation,Natural Gas and Desulphurization,4488,1751,5,53,97
+1000,PIPING,1000-02,Gas Preparation,Fuel Gas & Distribution,3112,861,138,51,11
+1000,PIPING,1000-03,Gas Preparation,Natural Gas Saturation & Condensate,1779,431,9,31,92
+1000,PIPING,1000-04,Gas Preparation,Gas Station,2484,329,14,39,41
+2000,PIPING,2000-01,Reforming,Pre Reforming,4527,2219,297,64,70
+2000,PIPING,2000-02,Reforming,Primary Reforming,919,594,69,25,2
+2000,PIPING,2000-03,Reforming,Process Oxygen and Secondary Reformer,98,63,3,2,43
+2000,PIPING,2000-04,Reforming,Steam Generation & Superheated Steam,1693,1361,65,64,20
+2000,PIPING,2000-05,Reforming,Gas Cooling and Separation,2657,2556,278,20,105
+2000,PIPING,2000-06,Reforming,Nitrogen Circuit,1146,1141,80,15,49
+3000,PIPING,3000-01,Compression and Synthesis,Synthesis Gas Compression,2873,1223,103,75,27
+3000,PIPING,3000-02,Compression and Synthesis,Methanol Synthesis,3139,2266,275,61,64
+3000,PIPING,3000-03,Compression and Synthesis,Synthesis Gas Cooling,2517,2204,19,85,8
+3000,PIPING,3000-04,Compression and Synthesis,Hydrogen System,3558,2438,251,34,68
+4000,PIPING,4000-01,Utility,Nitrogen,1761,1248,24,109,93
+4000,PIPING,4000-02,Utility,"HHP, HP and LP Steam",1329,1309,52,78,18
+4000,PIPING,4000-03,Utility,MP Steam,123,108,0,94,96
+4000,PIPING,4000-04,Utility,Boiler Feed Water (BFW) Generation & Distribution,288,134,19,85,39
+4000,PIPING,4000-05,Utility,Blow Down,3539,3018,235,3,4
+4000,PIPING,4000-06,Utility,DM & Polishing Water & Neutralization System,4440,1365,170,13,102
+4000,PIPING,4000-07,Utility,Plant Air,3821,3068,261,49,50
+4000,PIPING,4000-08,Utility,Cooling Water,3949,2942,343,33,38
+4000,PIPING,4000-09,Utility,Oily Water Treatment,2833,1956,185,1,22
+4000,PIPING,4000-10,Utility,Sanitary Water Collection,2998,2108,344,47,104
+4000,PIPING,4000-11,Utility,Instrument Air,3911,3261,19,25,45
+4000,PIPING,4000-12,Utility,COC Water and Lab Chemical Sump,291,37,5,36,10
+4000,PIPING,4000-13,Utility,Slope Close Drain,2514,1235,175,14,72
+4000,PIPING,4000-14,Utility,Fire Water,2608,1957,104,48,73
+4000,PIPING,4000-15,Utility,Potable & Service Water,721,600,27,34,38
+5000,PIPING,5000-01,Distillation & Methanol Product,Crude Methanol and Stabilizer & Slope Methanol,144,112,2,21,100
+5000,PIPING,5000-02,Distillation & Methanol Product,Low Pressure (LP) Methanol,1590,1212,39,8,53
+5000,PIPING,5000-03,Distillation & Methanol Product,Medium Pressure (MP) Methanol,4828,1024,80,7,72
+5000,PIPING,5000-04,Distillation & Methanol Product,Methanol Product,3164,1105,129,101,12
+5000,PIPING,5000-05,Distillation & Methanol Product,Liquid Off Stream,2515,328,43,108,87
+7000,PIPING,7000-01,Flare,Flare System,3624,3202,98,38,65
+1000,MECHANICAL,1000-01,Gas Preparation,Natural Gas and Desulphurization,1064,442,5,72,96
+1000,MECHANICAL,1000-02,Gas Preparation,Fuel Gas & Distribution,4545,1830,92,16,79
+1000,MECHANICAL,1000-03,Gas Preparation,Natural Gas Saturation & Condensate,3532,944,84,103,48
+1000,MECHANICAL,1000-04,Gas Preparation,Gas Station,3467,1188,103,38,24
+2000,MECHANICAL,2000-01,Reforming,Pre Reforming,1468,1305,50,71,68
+2000,MECHANICAL,2000-02,Reforming,Primary Reforming,976,345,22,90,56
+2000,MECHANICAL,2000-03,Reforming,Process Oxygen and Secondary Reformer,2728,1409,206,45,80
+2000,MECHANICAL,2000-04,Reforming,Steam Generation & Superheated Steam,2599,1024,113,87,22
+2000,MECHANICAL,2000-05,Reforming,Gas Cooling and Separation,2728,26,1,36,46
+2000,MECHANICAL,2000-06,Reforming,Nitrogen Circuit,4576,2439,60,5,97
+3000,MECHANICAL,3000-01,Compression and Synthesis,Synthesis Gas Compression,1945,850,75,79,94
+3000,MECHANICAL,3000-02,Compression and Synthesis,Methanol Synthesis,3790,632,13,104,90
+3000,MECHANICAL,3000-03,Compression and Synthesis,Synthesis Gas Cooling,4328,817,124,25,95
+3000,MECHANICAL,3000-04,Compression and Synthesis,Hydrogen System,303,285,3,3,61
+4000,MECHANICAL,4000-01,Utility,Nitrogen,3542,1741,101,48,41
+4000,MECHANICAL,4000-02,Utility,"HHP, HP and LP Steam",1327,392,52,86,45
+4000,MECHANICAL,4000-03,Utility,MP Steam,4702,3318,163,24,66
+4000,MECHANICAL,4000-04,Utility,Boiler Feed Water (BFW) Generation & Distribution,2400,124,3,94,26
+4000,MECHANICAL,4000-05,Utility,Blow Down,1702,1572,116,12,22
+4000,MECHANICAL,4000-06,Utility,DM & Polishing Water & Neutralization System,2881,2354,221,46,75
+4000,MECHANICAL,4000-07,Utility,Plant Air,130,104,14,66,70
+4000,MECHANICAL,4000-08,Utility,Cooling Water,2358,889,87,41,51
+4000,MECHANICAL,4000-09,Utility,Oily Water Treatment,4206,846,136,13,58
+4000,MECHANICAL,4000-10,Utility,Sanitary Water Collection,1700,1663,63,103,102
+4000,MECHANICAL,4000-11,Utility,Instrument Air,4144,1739,275,88,102
+4000,MECHANICAL,4000-12,Utility,COC Water and Lab Chemical Sump,3609,2094,111,65,8
+4000,MECHANICAL,4000-13,Utility,Slope Close Drain,3515,1175,67,73,44
+4000,MECHANICAL,4000-14,Utility,Fire Water,4045,785,50,37,76
+4000,MECHANICAL,4000-15,Utility,Potable & Service Water,741,351,54,9,8
+5000,MECHANICAL,5000-01,Distillation & Methanol Product,Crude Methanol and Stabilizer & Slope Methanol,72,12,2,29,97
+5000,MECHANICAL,5000-02,Distillation & Methanol Product,Low Pressure (LP) Methanol,4819,2059,277,34,101
+5000,MECHANICAL,5000-03,Distillation & Methanol Product,Medium Pressure (MP) Methanol,2061,2016,308,98,93
+5000,MECHANICAL,5000-04,Distillation & Methanol Product,Methanol Product,2453,866,120,51,13
+5000,MECHANICAL,5000-05,Distillation & Methanol Product,Liquid Off Stream,4799,3353,544,21,24
+7000,MECHANICAL,7000-01,Flare,Flare System,88,26,1,28,88
+1000,ELECTRICAL,1000-01,Gas Preparation,Natural Gas and Desulphurization,3998,3569,359,72,61
+1000,ELECTRICAL,1000-02,Gas Preparation,Fuel Gas & Distribution,1060,454,34,79,31
+1000,ELECTRICAL,1000-03,Gas Preparation,Natural Gas Saturation & Condensate,582,271,44,78,48
+1000,ELECTRICAL,1000-04,Gas Preparation,Gas Station,4025,196,14,22,95
+2000,ELECTRICAL,2000-01,Reforming,Pre Reforming,3498,2458,370,39,49
+2000,ELECTRICAL,2000-02,Reforming,Primary Reforming,563,23,2,54,52
+2000,ELECTRICAL,2000-03,Reforming,Process Oxygen and Secondary Reformer,4766,3513,37,51,98
+2000,ELECTRICAL,2000-04,Reforming,Steam Generation & Superheated Steam,3985,576,39,45,25
+2000,ELECTRICAL,2000-05,Reforming,Gas Cooling and Separation,2764,456,56,73,47
+2000,ELECTRICAL,2000-06,Reforming,Nitrogen Circuit,3213,3190,468,27,104
+3000,ELECTRICAL,3000-01,Compression and Synthesis,Synthesis Gas Compression,4267,2846,7,56,78
+3000,ELECTRICAL,3000-02,Compression and Synthesis,Methanol Synthesis,74,35,3,54,25
+3000,ELECTRICAL,3000-03,Compression and Synthesis,Synthesis Gas Cooling,2637,701,111,69,46
+3000,ELECTRICAL,3000-04,Compression and Synthesis,Hydrogen System,1678,1425,96,31,89
+4000,ELECTRICAL,4000-01,Utility,Nitrogen,2595,1829,223,30,40
+4000,ELECTRICAL,4000-02,Utility,"HHP, HP and LP Steam",4034,2881,357,24,11
+4000,ELECTRICAL,4000-03,Utility,MP Steam,3573,1428,196,94,24
+4000,ELECTRICAL,4000-04,Utility,Boiler Feed Water (BFW) Generation & Distribution,1797,1074,59,32,24
+4000,ELECTRICAL,4000-05,Utility,Blow Down,4463,3631,266,81,78
+4000,ELECTRICAL,4000-06,Utility,DM & Polishing Water & Neutralization System,4198,1281,105,56,38
+4000,ELECTRICAL,4000-07,Utility,Plant Air,4057,3697,499,10,100
+4000,ELECTRICAL,4000-08,Utility,Cooling Water,1134,709,76,55,9
+4000,ELECTRICAL,4000-09,Utility,Oily Water Treatment,847,280,14,14,14
+4000,ELECTRICAL,4000-10,Utility,Sanitary Water Collection,4000,1049,152,5,64
+4000,ELECTRICAL,4000-11,Utility,Instrument Air,1583,261,42,64,53
+4000,ELECTRICAL,4000-12,Utility,COC Water and Lab Chemical Sump,4440,3895,490,20,39
+4000,ELECTRICAL,4000-13,Utility,Slope Close Drain,208,52,3,25,98
+4000,ELECTRICAL,4000-14,Utility,Fire Water,3544,2678,193,39,98
+4000,ELECTRICAL,4000-15,Utility,Potable & Service Water,1281,100,15,78,90
+5000,ELECTRICAL,5000-01,Distillation & Methanol Product,Crude Methanol and Stabilizer & Slope Methanol,1173,917,58,100,22
+5000,ELECTRICAL,5000-02,Distillation & Methanol Product,Low Pressure (LP) Methanol,4546,1659,232,16,87
+5000,ELECTRICAL,5000-03,Distillation & Methanol Product,Medium Pressure (MP) Methanol,2696,1152,90,33,90
+5000,ELECTRICAL,5000-04,Distillation & Methanol Product,Methanol Product,4722,793,83,91,46
+5000,ELECTRICAL,5000-05,Distillation & Methanol Product,Liquid Off Stream,2388,2117,84,54,110
+7000,ELECTRICAL,7000-01,Flare,Flare System,4891,361,40,5,71
+1000,INSTRUMENT,1000-01,Gas Preparation,Natural Gas and Desulphurization,893,71,10,57,95
+1000,INSTRUMENT,1000-02,Gas Preparation,Fuel Gas & Distribution,2843,1745,82,73,2
+1000,INSTRUMENT,1000-03,Gas Preparation,Natural Gas Saturation & Condensate,2374,1885,235,16,4
+1000,INSTRUMENT,1000-04,Gas Preparation,Gas Station,3163,2220,97,109,86
+2000,INSTRUMENT,2000-01,Reforming,Pre Reforming,3193,2520,279,23,97
+2000,INSTRUMENT,2000-02,Reforming,Primary Reforming,1872,758,89,100,8
+2000,INSTRUMENT,2000-03,Reforming,Process Oxygen and Secondary Reformer,43,18,2,107,83
+2000,INSTRUMENT,2000-04,Reforming,Steam Generation & Superheated Steam,2453,1069,74,31,37
+2000,INSTRUMENT,2000-05,Reforming,Gas Cooling and Separation,4875,2926,457,105,26
+2000,INSTRUMENT,2000-06,Reforming,Nitrogen Circuit,1724,596,21,92,101
+3000,INSTRUMENT,3000-01,Compression and Synthesis,Synthesis Gas Compression,3450,1395,74,57,22
+3000,INSTRUMENT,3000-02,Compression and Synthesis,Methanol Synthesis,2551,1606,263,51,34
+3000,INSTRUMENT,3000-03,Compression and Synthesis,Synthesis Gas Cooling,4492,4183,231,66,38
+3000,INSTRUMENT,3000-04,Compression and Synthesis,Hydrogen System,2841,63,10,88,107
+4000,INSTRUMENT,4000-01,Utility,Nitrogen,727,333,37,76,84
+4000,INSTRUMENT,4000-02,Utility,"HHP, HP and LP Steam",2487,1851,155,94,108
+4000,INSTRUMENT,4000-03,Utility,MP Steam,1465,129,7,58,44
+4000,INSTRUMENT,4000-04,Utility,Boiler Feed Water (BFW) Generation & Distribution,748,170,6,23,74
+4000,INSTRUMENT,4000-05,Utility,Blow Down,585,17,2,54,81
+4000,INSTRUMENT,4000-06,Utility,DM & Polishing Water & Neutralization System,2957,2370,104,86,12
+4000,INSTRUMENT,4000-07,Utility,Plant Air,4160,3440,103,19,17
+4000,INSTRUMENT,4000-08,Utility,Cooling Water,4851,2489,395,41,73
+4000,INSTRUMENT,4000-09,Utility,Oily Water Treatment,1699,1509,19,34,95
+4000,INSTRUMENT,4000-10,Utility,Sanitary Water Collection,3790,321,42,41,66
+4000,INSTRUMENT,4000-11,Utility,Instrument Air,1640,553,7,92,27
+4000,INSTRUMENT,4000-12,Utility,COC Water and Lab Chemical Sump,3668,585,28,34,6
+4000,INSTRUMENT,4000-13,Utility,Slope Close Drain,3740,1027,23,66,48
+4000,INSTRUMENT,4000-14,Utility,Fire Water,1130,470,36,19,33
+4000,INSTRUMENT,4000-15,Utility,Potable & Service Water,1901,1357,173,2,2
+5000,INSTRUMENT,5000-01,Distillation & Methanol Product,Crude Methanol and Stabilizer & Slope Methanol,3724,2006,217,108,58
+5000,INSTRUMENT,5000-02,Distillation & Methanol Product,Low Pressure (LP) Methanol,4121,3841,423,104,59
+5000,INSTRUMENT,5000-03,Distillation & Methanol Product,Medium Pressure (MP) Methanol,4432,1824,164,97,60
+5000,INSTRUMENT,5000-04,Distillation & Methanol Product,Methanol Product,727,440,18,66,30
+5000,INSTRUMENT,5000-05,Distillation & Methanol Product,Liquid Off Stream,3737,409,6,77,62
+7000,INSTRUMENT,7000-01,Flare,Flare System,768,155,1,105,83
